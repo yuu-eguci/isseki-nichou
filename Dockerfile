@@ -1,5 +1,4 @@
-# syntax=docker/dockerfile:1
-FROM python:3.14-slim AS runtime
+FROM python:3.14.8-slim-trixie AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     ISSEKI_DB=/data/isseki.sqlite3
@@ -15,7 +14,7 @@ CMD ["python", "KillBirds.py"]
 FROM runtime AS dev
 USER root
 COPY requirements-dev.txt ./
-RUN pip install --no-cache-dir -r requirements-dev.txt
+RUN pip install --no-cache-dir --require-hashes -r requirements-dev.txt
 COPY pyproject.toml ./
 COPY tests/ tests/
 ENV RUFF_NO_CACHE=true

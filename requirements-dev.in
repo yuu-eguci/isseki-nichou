@@ -1,0 +1,6 @@
+# 直接使う開発用ツールです。 requirements-dev.txt (ハッシュ付きの lock) はここから生成します。
+# 更新するときは、このファイルを編集してからリポジトリのルートで次のコマンドを実行します。
+# docker run --rm -v "$PWD":/work -w /work python:3.14.8-slim-trixie sh -c 'pip install -q --root-user-action=ignore pip-tools==7.6.2 && pip-compile -q --generate-hashes --strip-extras --no-header --allow-unsafe --output-file requirements-dev.txt requirements-dev.in'
+ruff==0.16.10
+pytest==9.1.1
+pip-audit==2.10.1
