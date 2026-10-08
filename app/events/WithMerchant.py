@@ -115,6 +115,12 @@ class WithMerchant(InputKey):
     def checkStone(self, data):
         data.attr = "checkStone"
 
+        # 石がひとつもないときは何もせずに戻ります。
+        if len(data.stonesList) == 0:
+            systemDis0("石がひとつもありません。")
+            data.attr = "browseStones"
+            return data
+
         # 対象の石情報を得る
         target    = data.stonesList[data.cursor]
         nameANDcm = target.split("@")
@@ -207,6 +213,8 @@ class WithMerchant(InputKey):
             del data.price
             systemDis0("売却可能な石をまとめ売りしました。")
             systemDis0("現在の所持金は %s です。" % data.gold)
+        # カーソルが石のリストからはみ出さないようにします。
+        data.cursor = min(data.cursor, max(len(data.stonesList) - 1, 0))
         data.attr = "browseStones"
         return data
 

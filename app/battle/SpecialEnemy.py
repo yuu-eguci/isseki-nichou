@@ -169,11 +169,11 @@ class SpecialEnemy(InputKey):
             systemDis0("自分の傷を手当しました。")
 
             # 賞品として5.0CMの石とお金を入手
-            prizes = random.choice(SpecialEnemy.scorpionsList)
-            data.stonesList.append(prizes[0] + "@5.0CM")
+            prize = random.choice(SpecialEnemy.scorpionsList)
+            data.stonesList.append(prize + "@5.0CM")
             data.gold += 2000
             systemDis0("強盗の死骸の荷から石とお金を見つけた。")
-            systemDis0("持ち物に %s 5.0CM を追加しました。" % prizes[0])
+            systemDis0("持ち物に %s 5.0CM を追加しました。" % prize)
             systemDis0("所持金に 2000 加えました。")
 
             # troDataListに"Robber"追加

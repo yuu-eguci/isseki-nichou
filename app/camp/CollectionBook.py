@@ -31,7 +31,7 @@ class CollectionBook(InputKey):
                 key = input()
 
                 # 数字と文字の分岐
-                if key.isdigit():
+                if key.isdecimal() and len(key) <= 3:
                     data.page = int(key)
                     data = self.openPage(data)
                 else:
@@ -48,7 +48,7 @@ class CollectionBook(InputKey):
                 key = input()
 
                 # 数字と文字の分岐
-                if key.isdigit():
+                if key.isdecimal() and len(key) <= 3:
                     data.page = int(key)
                     data = self.openPage(data)
                 else:
@@ -101,7 +101,7 @@ class CollectionBook(InputKey):
                 key = input()
 
                 # 数字と文字の分岐
-                if key.isdigit():
+                if key.isdecimal() and len(key) <= 3:
                     data.page = int(key)
                     data = self.openPage(data)
                 else:
@@ -140,6 +140,11 @@ class CollectionBook(InputKey):
     # 石を収める
     # ==============================
     def collectStone(self, data):
+        # 石がひとつもないときは何もせずに戻ります。
+        if len(data.stonesList) == 0:
+            systemDis0("石がひとつもありません。")
+            return data
+
         # "宝石名 サイズ"を作る
         nameANDcm   = data.stonesList[data.cursor].split("@")
         data.target = "%s %s" % (nameANDcm[0], nameANDcm[1])
@@ -168,6 +173,9 @@ class CollectionBook(InputKey):
 
         # いま収めたものをstonesListから削除
         data.stonesList.pop(data.cursor)
+
+        # カーソルが石のリストからはみ出さないようにします。
+        data.cursor = min(data.cursor, max(len(data.stonesList) - 1, 0))
 
         # ついでにメインデータのセーブを行う
         DB.save(data)
@@ -260,8 +268,7 @@ class CollectionBook(InputKey):
 
         # scoreに日付を加えてscoreListに追加
         d = datetime.datetime.today()
-        data.tmpScore = str(data.tmpScore) + "|" + d.strftime("%Y.%m.%d.")
-        data.scoreList.append(str(data.tmpScore))
+        data.scoreList.append(str(data.tmpScore) + "|" + d.strftime("%Y.%m.%d."))
 
         # 周回数を使って猟銃生成
         clearNum = len(data.scoreList)
