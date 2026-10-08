@@ -66,7 +66,7 @@ def adminDis(statement):
 # あっちこっちディレクトリをいったりきたりするので、そのたびに相対インポートするのは大変
 # なのでimport pathに全ディレクトリをあらかじめ登録しちゃう
 # ==============================
-import sys, os
+import os
 
 def makeDirs():
     dirs = []

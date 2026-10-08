@@ -4,11 +4,15 @@
 # DBのロードとセーブ
 
 import sqlite3
+import os
 from CommonFunctions import *
 from Data            import *
 from CreateStone     import *
 
 class DB:
+    # セーブデータの場所です。環境変数 ISSEKI_DB で変えられます (Docker ではこれを使います) 。
+    dbPath = os.environ.get("ISSEKI_DB", "app/isseki.sqlite3")
+
     # ==============================
     # DBのsavesテーブルのカラム情報を書いてね "カラム名":"初期値"
     # ==============================
@@ -87,7 +91,7 @@ class DB:
     # 新しくデータを作る 名前が重複してたらFalseを返し、ふつうに登録できたらTrueを返す
     # ==============================
     def makeData(inputName):
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         # inputNameが重複していないかチェックする
@@ -124,7 +128,7 @@ class DB:
     # ロードする 該当する名前のデータがあったらTrue、なければFalseを返す
     # ==============================
     def load(name):
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
         query      = "SELECT * FROM saves WHERE name=?;"
         cursor.execute(query, (name,))
@@ -167,7 +171,7 @@ class DB:
         data.trophy = data.trophies + "|||" + data.troData
 
         # DB接続開始する
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         # クエリ用の "field=?,m=?,stones=?..." を作る
@@ -197,7 +201,7 @@ class DB:
         num = 2
 
         # DB接続開始する
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         # 現在booksテーブルにあるページレコードの数
@@ -221,7 +225,7 @@ class DB:
     # ==============================
     def loadPage(data):
         # 指定されたsave_idとpageのレコードをbooksテーブルからひろってくる
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         query = ("SELECT " +
@@ -319,7 +323,7 @@ class DB:
         column = "column" + str(DB.stones[name]["column"])
 
         # DB接続開始する
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         # その部分にもともと入っているsizeを得る
@@ -343,7 +347,7 @@ class DB:
     # booksテーブルレコードの取得
     # ==============================
     def loadPages4Score(data):
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         query = ("SELECT " +
@@ -389,7 +393,7 @@ class DB:
     # ==============================
     def resetBook(data):
         # DB接続開始する
-        connection = sqlite3.connect("app/isseki.sqlite3")
+        connection = sqlite3.connect(DB.dbPath)
         cursor     = connection.cursor()
 
         # booksの、save_id=data.idのレコードを空欄にする

@@ -1,0 +1,20 @@
+[tool.ruff]
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B"]
+ignore = [
+    "F403", "F405",  # フラットな star import で各モジュールをつなぐ設計です
+    "E401", "E402",  # import は makePaths() の後に置く必要があります
+    "E701",          # 揃えて書いた 1 行 if は元のスタイルです
+    "E712", "E713",  # 元のスタイルです
+]
+
+[tool.ruff.lint.per-file-ignores]
+"KillBirds.py" = ["F401"]  # app.Start を import した時点でゲームが始まります
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# app/ 自体は入れません。 Start を import するとゲームが始まるためです。
+pythonpath = ["app/common", "app/battle", "app/camp", "app/events", "app/fields"]
+addopts = "-p no:cacheprovider"

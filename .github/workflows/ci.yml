@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build
+        run: docker compose --profile dev build game dev
+      - name: Lint
+        run: docker compose run --rm dev ruff check .
+      - name: Test
+        run: docker compose run --rm dev pytest
+      - name: Audit
+        run: docker compose run --rm dev pip-audit
+      - name: Smoke
+        run: |
+          out=$(printf 'nobody\n' | docker run -i --rm isseki-nichou:local 2>&1 || true)
+          grep -q 'データが見つかりませんでした' <<<"$out"

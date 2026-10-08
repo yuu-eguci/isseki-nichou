@@ -1,0 +1,9 @@
+.git
+.github
+**/__pycache__
+**/*.sqlite3-journal
+.ruff_cache
+.pytest_cache
+docs
+media
+**/.DS_Store

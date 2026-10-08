@@ -1,0 +1,21 @@
+services:
+  game:
+    build:
+      context: .
+      target: runtime
+    image: isseki-nichou:local
+    stdin_open: true
+    tty: true
+    volumes:
+      - isseki-data:/data
+  dev:
+    build:
+      context: .
+      target: dev
+    image: isseki-nichou:dev
+    profiles:
+      - dev
+
+volumes:
+  isseki-data:
+    name: isseki-data

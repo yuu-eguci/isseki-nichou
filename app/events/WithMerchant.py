@@ -132,7 +132,7 @@ class WithMerchant(InputKey):
             return data
 
         # 売値をはじき出す CreateStone.stonesの"name"をもとに"price"を求めてsizeをかける
-        for eng, dic in CreateStone.stones.items():
+        for dic in CreateStone.stones.values():
             if nameANDcm[0] == dic["name"]:
                 cm = nameANDcm[1].rstrip("CM")
                 data.price = round(dic["price"] * float(cm))
@@ -163,7 +163,7 @@ class WithMerchant(InputKey):
             elif nameANDcm[1] == "(未鑑定)":
                 pass
             else:
-                for eng, dic in CreateStone.stones.items():
+                for dic in CreateStone.stones.values():
                     if nameANDcm[0] == dic["name"]:
                         cm = nameANDcm[1].rstrip("CM")
                         data.price += round(dic["price"] * float(cm))

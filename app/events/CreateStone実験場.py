@@ -47,7 +47,7 @@ for stone in eval("CreateStone." + field + "Stones"):
 
 # 実際に pop合計 * 100 回まわす
 times = 100 * countPop(field)
-for i in range(times):
+for _ in range(times):
     resultDic[createStone(field)] += 1
 
 # 結果をリスト順に並べる

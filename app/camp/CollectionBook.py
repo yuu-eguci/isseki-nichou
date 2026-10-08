@@ -163,7 +163,7 @@ class CollectionBook(InputKey):
         # もともとなんか入ってたときはそれをstonesListに追加する
         if pastSize:
             pastStone = nameANDcm[0] + "@" + pastSize
-            new = data.stonesList.append(pastStone)
+            data.stonesList.append(pastStone)
             systemDis0("収集本に入っていた %s をカバンに戻しました。" % (nameANDcm[0] + " " + pastSize))
 
         # いま収めたものをstonesListから削除
