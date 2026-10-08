@@ -22,4 +22,8 @@
 from app.common import CommonFunctions
 CommonFunctions.makePaths()
 
-from app import Start
+# 入力が終わったとき (Ctrl-D) や Ctrl-C のときは、 traceback を出さずに終了します。
+try:
+    from app import Start
+except (EOFError, KeyboardInterrupt):
+    print("")

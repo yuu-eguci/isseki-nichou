@@ -101,6 +101,8 @@ class DB:
         saves      = DB.assoc(trash, ["name"])
         for save in saves:
             if save["name"] == inputName:
+                cursor.close()
+                connection.close()
                 return False
 
         # 重複がないならまずnameだけ登録する

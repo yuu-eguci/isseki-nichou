@@ -18,3 +18,4 @@ testpaths = ["tests"]
 # app/ 自体は入れません。 Start を import するとゲームが始まるためです。
 pythonpath = ["app/common", "app/battle", "app/camp", "app/events", "app/fields"]
 addopts = "-p no:cacheprovider"
+filterwarnings = ["error"]

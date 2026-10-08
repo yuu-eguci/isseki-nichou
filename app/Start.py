@@ -16,9 +16,13 @@ class Start:
 
             if key.startswith("make "):
                 # 新規登録する
-                newName = key.replace("make ", "")
-                if   newName.startswith("make "):
+                newName = key[len("make "):]
+                if   newName == "":
+                    systemDis("データ名を入力してください。")
+                elif newName.startswith("make "):
                     systemDis("データ名は'make 'からは始められません。別の名前を入力してください。")
+                elif newName.count(","):
+                    systemDis("データ名に','は使えません。別の名前を入力してください。")
                 elif newName.count("@"):
                     systemDis("データ名に'@'は使えません。別の名前を入力してください。")
                 else:

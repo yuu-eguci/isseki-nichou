@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import closing
 
 from DB import DB
 
@@ -57,6 +58,6 @@ def test_book_pages(db):
 
 def test_writes_go_to_db_path(db):
     DB.makeData("tester")
-    with sqlite3.connect(db) as connection:
+    with closing(sqlite3.connect(db)) as connection:
         rows = connection.execute("SELECT name FROM saves WHERE name='tester'").fetchall()
     assert rows == [("tester",)]

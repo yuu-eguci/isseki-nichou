@@ -8,7 +8,7 @@ def addDamage(data):
     gunName = data.gunsList[0].split("@")[0]
     if gunName.startswith("猟銃"):
         # クリア報酬の猟銃を装備中だったら、末尾の数字に1を足した数を追加する
-        return int(gunName[-1]) + 1
+        return int(gunName.split("マーク")[-1]) + 1
     else:
         return 0
 
