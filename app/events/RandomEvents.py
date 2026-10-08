@@ -18,7 +18,7 @@ class RandomEvents(InputKey):
         rand = random.randint(1, 10)
         if   rand <= 1:
             # 出現する敵を選択
-            data.enemy = random.choice(eval("RandomEvents." + data.field + "Enemies"))
+            data.enemy = random.choice(getattr(RandomEvents, data.field + "Enemies"))
             self.encounterEnemy(data)
         elif rand >= 10:
             self.findStone(data)

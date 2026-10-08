@@ -19,7 +19,8 @@ class FieldJunction:
             if data.m == -1:
                 field = Camp(data)
             else:
-                field = eval(data.field + "Field")(data)
+                # data.field はセーブデータから来るので、 eval せずに辞書で引きます。
+                field = {"Nagoya": NagoyaField, "Nagakute": NagakuteField}[data.field](data)
             data  = field.fieldMain(data)
             del field
 

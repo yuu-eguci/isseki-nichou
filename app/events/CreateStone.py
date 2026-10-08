@@ -101,7 +101,7 @@ class CreateStone:
         # stoneList(候補の石名) popList(stoneListのpopリスト) を作る
         stoneList = []
         for stone in CreateStone.stones:
-            if stone in eval("CreateStone." + field + "Stones"):
+            if stone in getattr(CreateStone, field + "Stones"):
                 stoneList.append(stone)
         popList = [CreateStone.stones[stone]["pop"] for stone in stoneList]
         # stoneList: ['topaz', 'lapislazuli', 'diamond',...]
