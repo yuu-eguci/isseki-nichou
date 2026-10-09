@@ -4,6 +4,7 @@
 # NagoyaEvent
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from RandomEvents    import *
 from WithMerchant    import *
@@ -42,10 +43,9 @@ class NagoyaEvents(InputKey):
         while 1:
             if data.m != 1:
                 return data
-            systemDis0("貼り紙がある。「フィールドでは害獣に注意しましょう。」")
-            systemDis("'w'で進む 's'で戻る 'c'でメニューを開く 'save'と入力するとセーブできます。")
+            Screen.scene("貼り紙がある。「フィールドでは害獣に注意しましょう。」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [c]メニュー [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save"])
 
     def event5(self, data):
@@ -61,51 +61,45 @@ class NagoyaEvents(InputKey):
                 "「あまり大金をもってフィールドの奥のほうを歩かないほうがいいぜ、強盗が出るって話だ」",
                 ]
 
-            systemDis0("旅人のうわさ話が聞こえてくる。")
-            systemDis0(random.choice(conversationsList))
-            systemDis("'w'で進む 's'で戻る 'c'でメニューを開く 'save'と入力するとセーブできます。")
+            Screen.scene("旅人のうわさ話が聞こえてくる。", random.choice(conversationsList))
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [c]メニュー [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save"])
 
     def event10(self, data):
         while 1:
             if data.m != 10:
                 return data
-            systemDis0("道路標識がある。「この先20M、ナガクテ・フィールドへの小道アリ。」")
-            systemDis("'w'で進む 's'で戻る 'c'でメニューを開く 'save'と入力するとセーブできます。")
+            Screen.scene("道路標識がある。「この先20M、ナガクテ・フィールドへの小道アリ。」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [c]メニュー [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save"])
 
     def event20(self, data):
         while 1:
             if data.m != 20:
                 return data
-            systemDis0("旅の商人がいる。「いらっしゃい」")
-            systemDis("'w'で進む 's'で戻る 'z'で売買をします。")
+            Screen.scene("旅の商人がいる。「いらっしゃい」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [z]売買する")
             data = self.inputKey(key, data, ["w","s","z"])
 
     def event30(self, data):
         while 1:
             if data.m != 30:
                 return data
-            systemDis0("ナガクテ・フィールドへの小道がある。")
-            systemDis("'w'で無視して進む 's'で戻る 'z'でナガクテ・フィールドへ這入る。")
+            Screen.scene("ナガクテ・フィールドへの小道がある。")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]無視して進む [s]戻る [z]ナガクテ・フィールドへ這入る")
             data = self.inputKey(key, data, ["w","s","z"])
 
     def event40(self, data):
         while 1:
             if data.m != 40:
                 return data
-            systemDis0("貼り紙がある。「この先10M、害獣の巣アリ。注意セヨ」")
-            systemDis("'w'で進む 's'で戻る 'c'でメニューを開く 'save'と入力するとセーブできます。")
+            Screen.scene("貼り紙がある。「この先10M、害獣の巣アリ。注意セヨ」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [c]メニュー [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save"])
 
     def event42(self, data):
@@ -115,10 +109,9 @@ class NagoyaEvents(InputKey):
 
         data.attr = "Nagoya42"
         while 1:
-            systemDis0("ランダムイベント: そのへんの草むらが気になる…。")
-            systemDis("'z'で調べる 'x'でそそくさと離れる。")
+            Screen.scene("ランダムイベント: そのへんの草むらが気になる…。")
             # キー入力
-            key = input()
+            key = Screen.ask("[z]調べる [x]そそくさと離れる")
             data = self.inputKey(key, data, ["z","x"])
             if   data.attr == "":
                 return data
@@ -136,10 +129,9 @@ class NagoyaEvents(InputKey):
         while 1:
             if data.m != 45:
                 return data
-            systemDis0("武装馬車がいる。「ベースキャンプまで乗ってくかい?」")
-            systemDis("'w'で進む 's'で戻る 'z'で乗る。")
+            Screen.scene("武装馬車がいる。「ベースキャンプまで乗ってくかい?」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [z]乗る")
             data = self.inputKey(key, data, ["w","s","z"])
 
     def event50(self, data):
@@ -153,11 +145,9 @@ class NagoyaEvents(InputKey):
             if data.m != 50:
                 return data
 
-            systemDis0("強力な害獣の巣だ。")
-            systemDis0("これ以上先へは進めない。")
-            systemDis("'s'で戻る 'c'でメニューを開きます。")
+            Screen.scene("強力な害獣の巣だ。", "これ以上先へは進めない。")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[s]戻る [c]メニュー")
             data = self.inputKey(key, data, ["s","c"])
 
     # ==============================

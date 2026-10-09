@@ -5,6 +5,7 @@
 # つかうときはインスタントインスタンスにしてくれたまえ
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 
 class Inventory(InputKey):
@@ -14,11 +15,10 @@ class Inventory(InputKey):
     def menu(self, data):
         data.attr = "menu"
         while 1:
-            systemDis0("現在の所持金は %s です。" % data.gold)
-            systemDis("'a'で石カバンを見る 'd'で武器を見る 'x'で戻ります。")
+            Screen.scene("現在の所持金は %s です。" % data.gold)
 
             # キー入力
-            key = input()
+            key = Screen.ask("[a]石カバンを見る [d]武器を見る [x]戻る")
             data = self.inputKey(key, data, ["a","d","x"])
 
             if data.attr == "":
@@ -33,20 +33,12 @@ class Inventory(InputKey):
         # カーソル位置の初期化
         data.cursor = 0
         while 1:
-            systemDis0("上下('w','s')で石を選ぶ 'a'で石を整理する")
-            systemDis0("'d'で選んだ石を捨てる 'c'ですべて捨てる 'x'で戻ります。")
-
             # 石のリストを作る
-            i = 0
-            for stone in data.stonesList:
-                nameANDcm = stone.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                invDis("%s %s %s" % (tmp, nameANDcm[0], nameANDcm[1]))
-                i += 1
-            print("\n")
+            Screen.scene("石カバン (%d 個)" % len(data.stonesList))
+            Screen.rows(Screen.table([stone.split("@")[:2] for stone in data.stonesList], data.cursor))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w/s]石を選ぶ [a]石を整理する [d]選んだ石を捨てる [c]すべて捨てる [x]戻る")
             data = self.inputKey(key, data, ["w","s","a","d","c","x"])
 
             if data.attr != "browseStones":
@@ -68,11 +60,10 @@ class Inventory(InputKey):
             nameANDcm   = data.stonesList[data.cursor].split("@")
             # inputZの中でいちいちtargetを作り直したくないのでdataに刻んで渡す
             data.target = "%s %s" % (nameANDcm[0], nameANDcm[1])
-            systemDis0("%s を捨てますがよろしいですか。" % data.target)
-            systemDis("'z'で捨てる 'x'でキャンセル。")
+            Screen.scene("%s を捨てますがよろしいですか。捨てた石は戻りません。" % data.target)
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]捨てる [x]キャンセル")
             data = self.inputKey(key, data, ["z","x"])
 
             if data.attr != "throwStone":
@@ -91,11 +82,10 @@ class Inventory(InputKey):
             return data
 
         while 1:
-            systemDis0("カバンの中の石をすべて捨てますがよろしいですか。")
-            systemDis("'z'で捨てる 'x'でキャンセル。")
+            Screen.scene("カバンの中の石 %d 個をすべて捨てますがよろしいですか。捨てた石は戻りません。" % len(data.stonesList))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]捨てる [x]キャンセル")
             data = self.inputKey(key, data, ["z","x"])
 
             if data.attr != "dumpStones":
@@ -192,25 +182,18 @@ class Inventory(InputKey):
         # カーソル位置の初期化
         data.cursor = 0
         while 1:
-            systemDis0("上下('w','s')で武器を選ぶ 'z'で選んだ銃を装備する 'x'で戻ります。")
-
             # 武器のリストを作る
-            i = 0
-            for gun in data.gunsList:
+            cells = []
+            for i, gun in enumerate(data.gunsList):
                 nameANDcm = gun.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                equ = "装備中" if i == 0 else ""
-                invDis("%s %s *%s %s" % (tmp, nameANDcm[0], nameANDcm[1], equ))
-                i += 1
+                cells.append([nameANDcm[0], "x" + nameANDcm[1], "装備中" if i == 0 else ""])
             for bullet in data.bulletsList:
                 nameANDcm = bullet.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                invDis("%s %s *%s" % (tmp, nameANDcm[0], nameANDcm[1]))
-                i += 1
-            print("\n")
+                cells.append([nameANDcm[0], "x" + nameANDcm[1]])
+            Screen.rows(Screen.table(cells, data.cursor))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w/s]武器を選ぶ [z]選んだ銃を装備する [x]戻る")
             data = self.inputKey(key, data, ["w","s","z","x"])
 
             if data.attr != "browseWeapons":

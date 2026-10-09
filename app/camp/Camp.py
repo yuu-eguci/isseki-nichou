@@ -5,6 +5,7 @@
 # mが-1だとJunctionからここへ来る
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from CampEvents      import *
 from CollectionBook  import *
@@ -25,11 +26,10 @@ class Camp(CampEvents):
                 systemDis0("キャンプに這入りました。「無事でなにより」")
                 roop += 1
             else:
-                systemDis0("現在キャンプにいます。")
-            systemDis("'w'でキャンプを出る 'a'で石(未鑑定)の鑑定 's'で弾の補充 'd'で収集本を見る。")
+                Screen.scene("現在キャンプにいます。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w]キャンプを出る [a]石(未鑑定)の鑑定 [s]弾の補充 [d]収集本を見る", quit=True)
             self.data = self.inputKey(key, self.data, ["w","s","a","d"])
 
     # ==============================

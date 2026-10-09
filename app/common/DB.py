@@ -5,6 +5,7 @@
 
 import sqlite3
 import os
+import Screen
 from CommonFunctions import *
 from Data            import *
 from CreateStone     import *
@@ -145,6 +146,7 @@ class DB:
             saves = DB.assoc(trash)
             # ロードが完了したら、それを記録装置インスタンスdataに保存する
             data  = Data(saves[0])
+            Screen.markSaved(data)
             systemDis0("ロードが完了しました。")
             return data
 
@@ -193,6 +195,7 @@ class DB:
         cursor.close()
         connection.close()
 
+        Screen.markSaved(data)
         systemDis0("セーブが完了しました。")
 
     # ==============================

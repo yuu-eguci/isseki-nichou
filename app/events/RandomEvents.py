@@ -4,6 +4,7 @@
 # RandomEvents
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from CreateStone     import *
 from KickEnemy       import *
@@ -30,11 +31,10 @@ class RandomEvents(InputKey):
     def encounterEnemy(self, data):
         data.attr = "enemy"
         while 1:
-            systemDis0("ランダムイベント: そのへんの草むらが気になる…。")
-            systemDis("'z'で調べる 'x'でそそくさと離れる。")
+            Screen.scene("ランダムイベント: そのへんの草むらが気になる…。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]調べる [x]そそくさと離れる")
             data = self.inputKey(key, data, ["z","x"])
 
             if data.attr != "enemy":
@@ -46,11 +46,10 @@ class RandomEvents(InputKey):
     def findStone(self, data):
         data.attr = "stone"
         while 1:
-            systemDis0("ランダムイベント: そのへんの草むらが気になる…。")
-            systemDis("'z'で調べる 'x'でそそくさと離れる。")
+            Screen.scene("ランダムイベント: そのへんの草むらが気になる…。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]調べる [x]そそくさと離れる")
             data = self.inputKey(key, data, ["z","x"])
 
             # xが押されたらreturn
@@ -61,12 +60,10 @@ class RandomEvents(InputKey):
         # 石を内部的に追加する
         data.stonesList.append("石@(未鑑定)@" + CreateStone.createStone(data.field))
         while 1:
-            systemDis0("気になる石を見つけた。「価値のあるものかもしれない」")
-            systemDis0("持ち物に石(未鑑定)を追加しました。")
-            systemDis("'x'でこの場を離れる。")
+            Screen.scene("気になる石を見つけた。「価値のあるものかもしれない」", "持ち物に石(未鑑定)を追加しました。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[x]この場を離れる")
             data = self.inputKey(key, data, ["x"])
 
             # xが押されたらreturn

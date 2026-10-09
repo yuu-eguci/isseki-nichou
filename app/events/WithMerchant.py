@@ -4,6 +4,7 @@
 # WithMerchant
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from CreateStone     import *
 
@@ -16,10 +17,9 @@ class WithMerchant(InputKey):
         while 1:
             if data.attr != "talkMerchant":
                 return data
-            systemDis0("商人がこちらを見ている。「なにか買う?」")
-            systemDis("'a'で弾を買う 'd'で石を売る 'x'で話をやめます。")
+            Screen.scene("商人がこちらを見ている。「なにか買う?」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[a]弾を買う [d]石を売る [x]話をやめる")
             data = self.inputKey(key, data, ["a","d","x"])
 
     # ==============================
@@ -31,20 +31,13 @@ class WithMerchant(InputKey):
         while 1:
             if data.attr != "browseBullets":
                 return data
-            systemDis0("「100%純正だよ」")
-            systemDis0("上下('w','s')で選ぶ 'z'で選んだ弾を買う 'x'で戻ります。")
+            Screen.scene("「100%純正だよ」")
 
             # 売り物リストを作る
-            i = 0
-            for sale in WithMerchant.saleList:
-                nameANDgold = sale.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                invDis("%s %s %s金" % (tmp, nameANDgold[0], nameANDgold[1]))
-                i += 1
-            print("\n")
+            Screen.rows(Screen.table([[name, gold + "金"] for name, gold in (sale.split("@") for sale in WithMerchant.saleList)], data.cursor))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w/s]選ぶ [z]選んだ弾を買う [x]戻る")
             data = self.inputKey(key, data, ["w","s","z","x"])
 
     # ==============================
@@ -55,13 +48,11 @@ class WithMerchant(InputKey):
         while 1:
             if data.attr != "checkBullet":
                 return data
-            systemDis0("「%sだよ。いいかね」" % (WithMerchant.explList[data.cursor]))
-            systemDis0("所持金は %s です。" % data.gold)
+            Screen.scene("「%sだよ。いいかね」" % (WithMerchant.explList[data.cursor]), "所持金は %s です。" % data.gold)
             price = WithMerchant.saleList[data.cursor].split("@")[1]
-            systemDis("'z'で%s金支払い購入する 'x'でやめます。" % price)
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]%s金支払い購入する [x]やめる" % price)
             data = self.inputKey(key, data, ["z","x"])
 
     # ==============================
@@ -94,19 +85,12 @@ class WithMerchant(InputKey):
         while 1:
             if data.attr != "browseStones":
                 return data
-            systemDis0("上下('w','s')で石を選ぶ 'z'で選んだ石を売る 'c'ですべて売る 'x'で戻ります。")
-
             # 石のリストを作る
-            i = 0
-            for stone in data.stonesList:
-                nameANDcm = stone.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                invDis("%s %s %s" % (tmp, nameANDcm[0], nameANDcm[1]))
-                i += 1
-            print("\n")
+            Screen.scene("石カバン (%d 個)" % len(data.stonesList))
+            Screen.rows(Screen.table([stone.split("@")[:2] for stone in data.stonesList], data.cursor))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w/s]石を選ぶ [z]選んだ石を売る [c]すべて売る [x]戻る")
             data = self.inputKey(key, data, ["w","s","z","c","x"])
 
     # ==============================
@@ -146,12 +130,10 @@ class WithMerchant(InputKey):
         while 1:
             if data.attr != "checkStone":
                 return data
-            systemDis0("%s金で買い取るよ。いいかね" % data.price)
-            systemDis0("所持金は %s です。" % data.gold)
-            systemDis("'z'で売却する 'x'でやめます。")
+            Screen.scene("%s金で買い取るよ。いいかね" % data.price, "所持金は %s です。" % data.gold)
 
             # キー入力
-            key  = input()
+            key  = Screen.ask("[z]売却する [x]やめる")
             data = self.inputKey(key, data, ["z","x"])
 
     # ==============================
@@ -177,12 +159,10 @@ class WithMerchant(InputKey):
         while 1:
             if data.attr != "checkAllStones":
                 return data
-            systemDis0("%s金で買い取るよ。いいかね" % data.price)
-            systemDis0("所持金は %s です。" % data.gold)
-            systemDis("'z'で売却する 'x'でやめます。")
+            Screen.scene("%s金で買い取るよ。いいかね" % data.price, "所持金は %s です。" % data.gold)
 
             # キー入力
-            key  = input()
+            key  = Screen.ask("[z]売却する [x]やめる")
             data = self.inputKey(key, data, ["z","x"])
 
     # ==============================

@@ -4,6 +4,7 @@
 # NagakuteEvent
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from RandomEvents    import *
 from WithMerchant    import *
@@ -41,10 +42,9 @@ class NagakuteEvents(InputKey):
         while 1:
             if data.m != 1:
                 return data
-            systemDis0("ナゴヤ・フィールドへの小道がある。")
-            systemDis("'w'で無視して進む 's'で戻る 'z'でナゴヤ・フィールドへ這入る。")
+            Screen.scene("ナゴヤ・フィールドへの小道がある。")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]無視して進む [s]戻る [z]ナゴヤ・フィールドへ這入る")
             data = self.inputKey(key, data, ["w","s","z"])
 
     def event10(self, data):
@@ -61,42 +61,35 @@ class NagakuteEvents(InputKey):
                 "「ナガクテ・フィールドの大ボスの弱点は、黒弾らしいぜ」",
                 ]
 
-            systemDis0("旅人のうわさ話が聞こえてくる。")
-            systemDis0(random.choice(conversationsList))
-            systemDis("'w'で進む 's'で戻る 'c'でメニューを開く 'save'と入力するとセーブできます。")
+            Screen.scene("旅人のうわさ話が聞こえてくる。", random.choice(conversationsList))
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [c]メニュー [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save"])
 
     def event20(self, data):
         while 1:
             if data.m != 20:
                 return data
-            systemDis0("旅の商人がいる。「いらっしゃい」")
-            systemDis("'w'で進む 's'で戻る 'z'で売買をします。")
+            Screen.scene("旅の商人がいる。「いらっしゃい」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [z]売買する")
             data = self.inputKey(key, data, ["w","s","z"])
 
     def event30(self, data):
         while 1:
             if data.m != 30:
                 return data
-            systemDis0("旅人たちの話が聞こえてくる。")
-            systemDis0("「この先のほうで、好戦的な害獣が目撃されているそうだ。あんたも気をつけな」")
-            systemDis0("「出遭いそうになったらそそくさと離れた方がいいぜ」")
-            systemDis("'w'で進む 's'で戻る 'c'でメニューを開く 'save'と入力するとセーブできます。")
+            Screen.scene("旅人たちの話が聞こえてくる。", "「この先のほうで、好戦的な害獣が目撃されているそうだ。あんたも気をつけな」", "「出遭いそうになったらそそくさと離れた方がいいぜ」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [c]メニュー [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save"])
 
     def event40(self, data):
         data.attr = "Nagakute40"
         while 1:
-            systemDis0("ランダムイベント: そのへんの草むらが気になる…。")
-            systemDis("'z'で調べる 'x'でそそくさと離れる。")
+            Screen.scene("ランダムイベント: そのへんの草むらが気になる…。")
             # キー入力
-            key = input()
+            key = Screen.ask("[z]調べる [x]そそくさと離れる")
             data = self.inputKey(key, data, ["z","x"])
             if   data.attr == "":
                 return data
@@ -112,10 +105,9 @@ class NagakuteEvents(InputKey):
         while 1:
             if data.m != 45:
                 return data
-            systemDis0("武装馬車がいる。「ベースキャンプまで乗ってくかい?」")
-            systemDis("'w'で進む 's'で戻る 'z'で乗る。")
+            Screen.scene("武装馬車がいる。「ベースキャンプまで乗ってくかい?」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[w]進む [s]戻る [z]乗る")
             data = self.inputKey(key, data, ["w","s","z"])
 
     def event50(self, data):
@@ -129,11 +121,9 @@ class NagakuteEvents(InputKey):
             if data.m != 50:
                 return data
 
-            systemDis0("強力な害獣の巣だ。")
-            systemDis0("これ以上先へは進めない。")
-            systemDis("'s'で戻る 'c'でメニューを開きます。")
+            Screen.scene("強力な害獣の巣だ。", "これ以上先へは進めない。")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[s]戻る [c]メニュー")
             data = self.inputKey(key, data, ["s","c"])
 
     # ==============================

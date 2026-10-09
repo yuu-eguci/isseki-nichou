@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 import CommonFunctions
+import Screen
 from DB import DB
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -27,8 +28,8 @@ def committed_dbs_are_untouched():
 def fast_and_isolated(monkeypatch, tmp_path):
     """1 文字ずつの表示待ちを無くし、相対パスの DB に届かないようにします。"""
     monkeypatch.setattr(CommonFunctions, "messageInterval", 0)
-    monkeypatch.setattr(CommonFunctions, "invInterval", 0)
     monkeypatch.chdir(tmp_path)
+    Screen.reset()
 
 
 @pytest.fixture

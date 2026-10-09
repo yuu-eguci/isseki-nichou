@@ -4,9 +4,11 @@
 # CollectionBook
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from DB              import *
 import datetime
+from types           import SimpleNamespace
 from Trophy          import *
 
 class CollectionBook(InputKey):
@@ -23,12 +25,10 @@ class CollectionBook(InputKey):
         # コンプリートしてたら分岐する
         if self.checkComplete(data):
             while 1:
-                systemDis0("声をかけられた。「石をコンプリートしたようね。集計する?」")
-                systemDis0("半角数字で閲覧ページを指定 'c'で手持ちの石を収める 'x'で戻ります。")
-                systemDis("'z'で収集本のスコアを集計してもらいます。")
+                Screen.scene("声をかけられた。「石をコンプリートしたようね。集計する?」", self.collectedLine(data))
 
                 # キー入力
-                key = input()
+                key = Screen.ask("[番号]ページを見る [c]手持ちの石を収める [z]収集本のスコアを集計してもらう [x]戻る")
 
                 # 数字と文字の分岐
                 if key.isdecimal() and len(key) <= 3:
@@ -41,11 +41,10 @@ class CollectionBook(InputKey):
                     return data
         else:
             while 1:
-                systemDis0("収集本を手に取りました。「丁寧に扱ってよね」")
-                systemDis("半角数字で閲覧ページを指定 'c'で手持ちの石を収める 'x'で戻ります。")
+                Screen.scene("収集本を手に取りました。「丁寧に扱ってよね」", self.collectedLine(data))
 
                 # キー入力
-                key = input()
+                key = Screen.ask("[番号]ページを見る [c]手持ちの石を収める [x]戻る")
 
                 # 数字と文字の分岐
                 if key.isdecimal() and len(key) <= 3:
@@ -56,6 +55,18 @@ class CollectionBook(InputKey):
 
                 if data.m != -3:
                     return data
+
+    # ==============================
+    # 収集した種類の数 (全ページ分) の表示
+    # ==============================
+    def collectedLine(self, data):
+        count = 0
+        for i in range(len(CollectionBook.pagesList)):
+            columnList = DB.loadPage(SimpleNamespace(id=data.id, page=i + 1))
+            if columnList:
+                count += len([cm for cm in columnList.values() if cm])
+        total = sum(len(names) for names in CollectionBook.pagesList)
+        return "収集 %d/%d 種" % (count, total)
 
     # 収集本の表示用リスト インデックスがページ数 並び順がカラム順
     pagesList = [
@@ -77,7 +88,8 @@ class CollectionBook(InputKey):
             return data
         else:
             while 1:
-                systemDis0("%sページを開きました。" % data.page)
+                Screen.scene("%sページを開きました。" % data.page)
+                cells = []
 
                 pageList = CollectionBook.pagesList[data.page - 1]
                 for i in range(0, 10):
@@ -90,15 +102,12 @@ class CollectionBook(InputKey):
                         collected = "未収集"
 
                     # 収集ページの表示
-                    if i <= 8:
-                        invDis("0%s %s %s %s" % (i + 1, pageList[i], collected, cm))
-                    else:
-                        invDis("%s %s %s %s" % (i + 1, pageList[i], collected, cm))
+                    cells.append(["%02d" % (i + 1), pageList[i], collected, cm])
+                Screen.rows(Screen.table(cells))
 
-                systemDis("半角数字で閲覧ページを指定 'c'で手持ちの石を収める 'x'で戻ります。")
 
                 # キー入力
-                key = input()
+                key = Screen.ask("[番号]ページを見る [c]手持ちの石を収める [x]戻る")
 
                 # 数字と文字の分岐
                 if key.isdecimal() and len(key) <= 3:
@@ -118,19 +127,11 @@ class CollectionBook(InputKey):
         # カーソルの初期化
         data.cursor = 0
         while 1:
-            systemDis0("上下('w','s')で石を選ぶ 'z'で選んだ石を収める 'x'で戻ります。")
-
             # 石のリストを作る
-            i = 0
-            for stone in data.stonesList:
-                nameANDcm = stone.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                invDis("%s %s %s" % (tmp, nameANDcm[0], nameANDcm[1]))
-                i += 1
-            print("\n")
+            Screen.rows(Screen.table([stone.split("@")[:2] for stone in data.stonesList], data.cursor))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w/s]石を選ぶ [z]選んだ石を収める [x]戻る")
             data = self.inputKey(key, data, ["w","s","z","x"])
 
             if data.attr != "browseStones4Collect":
@@ -246,12 +247,10 @@ class CollectionBook(InputKey):
             scoreLine = "素晴らしいわね…最高の結果よ"
 
         while 1:
-            systemDis0("「集計結果は %s よ。%s」" % (data.tmpScore, scoreLine))
-            systemDis0("望むなら結果を記録し、ここを出ることができます。")
-            systemDis("'z'でここを出る 'x'で戻ります。")
+            Screen.scene("「集計結果は %s よ。%s」" % (data.tmpScore, scoreLine), "望むなら結果を記録し、ここを出ることができます。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]ここを出る [x]戻る")
             data = self.inputKey(key, data, ["z","x"])
 
             if data.attr != "ending":
@@ -276,8 +275,6 @@ class CollectionBook(InputKey):
         data.gunsList.append(newGun)
         systemDis0("持ち物に %s を追加しました。" % newGun.split("@")[0])
 
-        print("")
-
         # 勲章を追加する 点数が19000なら極めクリアーの勲章も追加する
         if not "クリアー" in data.trophiesList:
             data.trophiesList.append("クリアー")
@@ -296,11 +293,8 @@ class CollectionBook(InputKey):
         # セーブする
         DB.save(data)
 
-        print("")
-
         systemDis0("クリアおめでとうございます。あなたのスコアは %s でした。" % data.scoreList[-1].split("|")[0])
         systemDis0("そして、新たなあなたがやってくる……")
-        systemDis("==============================")
 
         # 勲章をコンプしてたらコンプリートメソッドを出す
         if len(data.trophiesList) >= len(Trophy.trophiesList):
@@ -314,16 +308,14 @@ class CollectionBook(InputKey):
     def completeGame(self, data):
         data.attr = "completeGame"
         while 1:
-            print("★★★★★★★★★★★★★★★★★★★★★★")
-            print("       You completed the Game!         ")
-            print("   Thank you very much for playing!    ")
-            print("★★★★★★★★★★★★★★★★★★★★★★")
-            print("")
-
-            systemDis("'z'で「いえいえどういたしまして。」")
+            Screen.scene(
+                "★★★★★★★★★★★★★★★★★★★★★★",
+                "       You completed the Game!         ",
+                "   Thank you very much for playing!    ",
+                "★★★★★★★★★★★★★★★★★★★★★★")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]「いえいえどういたしまして。」")
             data = self.inputKey(key, data, ["z"])
 
             if data.attr != "completeGame":

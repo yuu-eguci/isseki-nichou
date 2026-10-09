@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from CommonFunctions import *
+import Screen
 from DB              import *
 from FieldJunction   import *
 
@@ -9,10 +10,9 @@ class Start:
     def start(self):
         ### 名前を入力してセーブを読み込む ###
         while 1:
-            systemDis0("こんにちは。ロードするデータの名前を入力してください。")
-            systemDis("新しくデータを作る場合は'make 'のあとに作るデータの名前を入力してください。")
+            Screen.scene("こんにちは。ロードするデータの名前を入力してください。")
 
-            key = input()
+            key = Screen.ask("[名前]ロード [make 名前]新しいデータを作る")
 
             if key.startswith("make "):
                 # 新規登録する

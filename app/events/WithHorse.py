@@ -4,6 +4,7 @@
 # WithHorse
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 
 class WithHorse(InputKey):
@@ -12,10 +13,9 @@ class WithHorse(InputKey):
         while 1:
             if data.attr != "talkHorse":
                 return data
-            systemDis0("武装馬車の御者がこちらを見ている。「500金になるよ」")
-            systemDis("'z'で支払う 'x'でやめます。")
+            Screen.scene("武装馬車の御者がこちらを見ている。「500金になるよ」")
             # キー入力
-            key  = input()
+            key  = Screen.ask("[z]支払う [x]やめる")
             data = self.inputKey(key, data, ["z","x"])
 
     def payFare(self, data):

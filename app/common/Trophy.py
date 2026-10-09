@@ -5,6 +5,7 @@
 
 from CommonFunctions import *
 from InputKey        import *
+import Screen
 
 class Trophy(InputKey):
     trophiesList = [
@@ -21,30 +22,22 @@ class Trophy(InputKey):
         # カーソル位置の初期化
         data.cursor = 0
         while 1:
-            systemDis0("上下(w,s)で勲章と説明を見る 'x'で戻ります。")
-
             # 勲章のリストを作る data.trophiesList の文字列と一致してるものだけ表示する
-            i = 0
-            for trophy in Trophy.trophiesList:
-                tmp1 = "==>" if data.cursor == i else ""
-                tmp2 = (": %s" % list(Trophy.trophiesList[i].values())[0]) if data.cursor == i else ""
-                if not list(trophy.keys())[0] in data.trophiesList:
-                    trophy = "????"
-                    invDis("%s %s %s" % (tmp1, trophy, tmp2))
-                else:
-                    invDis("%s %s %s" % (tmp1, list(trophy.keys())[0], tmp2))
-                i += 1
+            cells = []
+            for i, trophy in enumerate(Trophy.trophiesList):
+                name = list(trophy.keys())[0]
+                tmp2 = (": %s" % list(trophy.values())[0]) if data.cursor == i else ""
+                cells.append([name if name in data.trophiesList else "????", tmp2])
+            Screen.scene("勲章")
+            Screen.rows(Screen.table(cells, data.cursor))
 
             # スコアの履歴を表示する
             if data.scoreList:
-                systemDis0("クリアスコアの履歴です。")
-                for score in data.scoreList:
-                    scoreANDdate = score.split("|")
-                    invDis("%s (%s)" % (scoreANDdate[0], scoreANDdate[1]))
-            print("\n")
+                Screen.rows(["", "クリアスコアの履歴です。"])
+                Screen.rows(Screen.table([score.split("|") for score in data.scoreList]))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w/s]勲章と説明を見る [x]戻る")
             data = self.inputKey(key, data, ["w","s","x"])
 
             if data.attr != "browseTrophies":

@@ -4,6 +4,7 @@
 # NagoyaField
 
 from CommonFunctions import *
+import Screen
 from NagoyaEvents    import *
 from Inventory       import *
 from Trophy          import *
@@ -14,13 +15,11 @@ class NagoyaField(NagoyaEvents):
 
     def fieldMain(self, data):
         while 1:
-            # 現在何メートルにいるか表示する
-            systemDis0("草木が微風にそよいでいる。")
-            systemDis0("現在ナゴヤ・エリア %d M 地点です。" % data.m)
-            systemDis("'w'で進む 's'で戻る 'c'でメニュー 'save'でセーブできます。")
+            # 現在何メートルにいるかはヘッダーに表示されます。
+            Screen.scene("草木が微風にそよいでいる。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w]進む [s]戻る [c]メニュー [q]勲章 [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save","q"])
 
             # self.mの値によってはJunctionに戻ったり固定イベントが発生する

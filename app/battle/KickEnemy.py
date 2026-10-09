@@ -4,6 +4,7 @@
 # KickEnemy 駆除を担当するクラス
 
 from CommonFunctions import *
+import Screen
 from InputKey        import *
 from SpecialEnemy    import *
 import random
@@ -50,22 +51,16 @@ class KickEnemy(InputKey):
         systemDis0("%s に襲われた! 「%s駆除しよう」" % (dic["name"], ("慎重に" if dic["event"] != "normal" else "")))
 
         while 1:
-            systemDis0("==============================")
-            systemDis0("敵:%s 残りHP:%s" % (dic["name"], data.enHp))
-            systemDis0("自分残りHP:%s" % data.myHp)
-            systemDis0("使用する弾薬を選んでください。使用銃:%s" % data.gunsList[0].split("@")[0])
+            # 敵と自分の HP 、使用銃、弾薬のリストを 1 画面にまとめます。
+            Screen.rows([
+                "%s %s" % (dic["name"], Screen.bar(data.enHp, dic["hp"])),
+                "自分 %s" % Screen.bar(data.myHp, 3),
+                "使用銃 %s" % data.gunsList[0].split("@")[0],
+                ""])
+            Screen.rows(Screen.table([[name, "x" + num] for name, num in (bullet.split("@") for bullet in data.bulletsList)], data.cursor))
 
-            # 弾薬のリストを作る
-            i = 0
-            for bullet in data.bulletsList:
-                nameANDnum = bullet.split("@")
-                tmp = "==>" if data.cursor == i else ""
-                invDis("%s %s *%s" % (tmp, nameANDnum[0], nameANDnum[1]))
-                i += 1
 
-            systemDis("上下(w,s)で弾薬を選ぶ 'z'で攻撃する 'x'で諦めます。")
-
-            key = input()
+            key = Screen.ask("[w/s]弾を選ぶ [z]撃つ [x]諦める")
             data = self.inputKey(key, data, ["w","s","z","x"])
 
             if data.attr != "kickEnemy":
@@ -107,7 +102,6 @@ class KickEnemy(InputKey):
                 # 相手のHPが0以下になったら駆除完了
                 systemDis0("敵の%sははじけ飛んだ。駆除を終了します。" % dic["name"])
                 systemDis0("自分の傷を手当しました。")
-                systemDis0("==============================")
                 data.attr = ""
             else:
                 # 相手が死んでないなら自分は1食らう
@@ -118,7 +112,6 @@ class KickEnemy(InputKey):
         if data.myHp <= 0:
             systemDis0("深手を負った。あなたは半狂乱で逃げ出しました。")
             systemDis0("気づけば石カバンの中身を失い、キャンプに戻っていました。")
-            systemDis0("==============================")
             data.stonesList = []
             data.m = -1
             data.attr = ""
@@ -132,13 +125,10 @@ class KickEnemy(InputKey):
         data.attr = "giveUp"
 
         while 1:
-            systemDis0("==============================")
-            systemDis0("石カバンを投げつけて逃走することができます。")
-            systemDis0("手持ちの石をすべて失いますがよろしいですか?")
-            systemDis("'z'でよろしい 'x'でやめます。")
+            Screen.scene("石カバンを投げつけて逃走することができます。", "手持ちの石 %d 個をすべて失いますがよろしいですか?" % len(data.stonesList))
 
             # キー入力
-            key = input()
+            key = Screen.ask("[z]よろしい (石をすべて失って逃げる) [x]やめる")
             data = self.inputKey(key, data, ["z","x"])
 
             if data.attr != "giveUp":
@@ -178,7 +168,6 @@ class KickEnemy(InputKey):
             data.m -= 1
             data.attr = ""
             systemDis0("逃走に成功しましたが、石をすべて失いました。")
-            systemDis0("==============================")
         return data
     def inputX(self, data):
         if   data.attr == "kickEnemy":

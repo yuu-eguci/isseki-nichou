@@ -42,7 +42,6 @@ class SpecialEnemy(InputKey):
             if not "Python" in data.troDataList:
                 data.troDataList.append("Python")
 
-            systemDis0("==============================")
             data.attr = ""
         else:
             # 相手が死んでないなら自分は1食らう
@@ -88,7 +87,6 @@ class SpecialEnemy(InputKey):
             if not "Buffalo" in data.troDataList:
                 data.troDataList.append("Buffalo")
 
-            systemDis0("==============================")
             data.attr = ""
         else:
             if   len(data.his) == 1:
@@ -180,7 +178,6 @@ class SpecialEnemy(InputKey):
             if not "Robber" in data.troDataList:
                 data.troDataList.append("Robber")
 
-            systemDis0("==============================")
             data.attr = ""
         else:
             if data.his[-1] == "weak":
@@ -238,7 +235,6 @@ class SpecialEnemy(InputKey):
             if not "Scorpions" in data.troDataList:
                 data.troDataList.append("Scorpions")
 
-            systemDis0("==============================")
             data.attr = ""
         else:
             # 相手が死んでないなら自分は1食らう

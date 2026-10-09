@@ -4,6 +4,7 @@
 # NagakuteField
 
 from CommonFunctions import *
+import Screen
 from NagakuteEvents  import *
 from Inventory       import *
 from Trophy          import *
@@ -14,13 +15,11 @@ class NagakuteField(NagakuteEvents):
 
     def fieldMain(self, data):
         while 1:
-            # 現在何メートルにいるか表示する
-            systemDis0("今にも降り出しそうな曇天が影を落としている。")
-            systemDis0("現在ナガクテ・エリア %d M 地点です。" % data.m)
-            systemDis("'w'で進む 's'で戻る 'c'でメニュー 'save'でセーブできます。")
+            # 現在何メートルにいるかはヘッダーに表示されます。
+            Screen.scene("今にも降り出しそうな曇天が影を落としている。")
 
             # キー入力
-            key = input()
+            key = Screen.ask("[w]進む [s]戻る [c]メニュー [q]勲章 [save]セーブ", quit=True)
             data = self.inputKey(key, data, ["w","s","c","save","q"])
 
             # self.mの値によってはJunctionに戻ったり固定イベントが発生する

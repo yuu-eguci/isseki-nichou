@@ -3,56 +3,25 @@
 
 # ==============================
 # 文章出力関数
+# 表示のしかた (画面の描き直しか追記か、 1 文字ずつ出すか) は Screen が決めます。
 # ==============================
-import time, sys
+# このファイルは makePaths() より前に読み込まれるので、 Screen は関数の中で import します。
+import sys
 
-# 1文字ずつちんたら表示したいときはTrueにしてね
-systemDisSwitch = True
-
+# 会話文を 1 文字ずつ出すとき (ISSEKI_TYPEWRITER=1) の間隔です。
 messageInterval = 0.005
 
 def systemDis0(statement):
-    stmt = list(statement)
-    sys.stdout.write("<SYSTEM>")
-    for st in stmt:
-        sys.stdout.write(st)
-        sys.stdout.flush()
-        time.sleep(messageInterval)
-    sys.stdout.write("\n")
-    sys.stdout.flush()
+    import Screen
+    Screen.say(statement)
 
 def systemDis(statement):
-    stmt = list(statement)
-    sys.stdout.write("<SYSTEM>")
-    for st in stmt:
-        sys.stdout.write(st)
-        sys.stdout.flush()
-        time.sleep(messageInterval)
-    sys.stdout.write("\n\n\n")
-    sys.stdout.flush()
-
-invInterval = 0.02
+    import Screen
+    Screen.say(statement)
 
 def invDis(statement):
-    stmt = list(statement)
-    sys.stdout.write("    ")
-    for st in stmt:
-        sys.stdout.write(st)
-        sys.stdout.flush()
-        time.sleep(invInterval)
-    sys.stdout.write("\n")
-    sys.stdout.flush()
-
-# ==============================
-# 文章出力関数(開発用) つまりちんたら出力しない
-# ==============================
-if systemDisSwitch == False:
-    def systemDis0(statement):
-        print("<SYSTEM>" + statement)
-    def systemDis(statement):
-        print("<SYSTEM>" + statement + "\n\n")
-    def invDis(statement):
-        print("    " + statement)
+    import Screen
+    Screen.rows(["    " + statement])
 
 # ==============================
 # 文章出力関数(開発用) <ADMIN>がつく
