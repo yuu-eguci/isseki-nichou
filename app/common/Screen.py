@@ -171,13 +171,20 @@ def frame(sceneLines, logLines, keys, cols, height):
     news = news[len(news) - max(room - len(main) - 1, 0):] if room - len(main) > 1 else []
     return top + main + ([""] + news if news else []) + foot
 
+def read():
+    # パイプから読んだ入力は画面に出ないので、追記表示のときは記録として出し直します。
+    key = input()
+    if isPlain() and not sys.stdin.isatty():
+        print(key)
+    return key
+
 def ask(keys, quit=False):
     # 使えるキーを表示して 1 行読みます。 quit=True の画面では quit で終了できます。
     if quit:
         keys += " [quit]終了"
     while 1:
         show(keys)
-        key = input()
+        key = read()
         if not (quit and key == "quit"):
             return key
         if not isDirty():
@@ -185,7 +192,7 @@ def ask(keys, quit=False):
         say("セーブしていない進行があります。セーブせずに終了すると、前回のセーブから再開になります。")
         while 1:
             show("[z]セーブせずに終了 [x]ゲームに戻る")
-            answer = input()
+            answer = read()
             if answer.lower() == "z":
                 raise SystemExit(0)
             if answer.lower() == "x":

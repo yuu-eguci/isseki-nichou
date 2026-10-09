@@ -255,3 +255,37 @@ def test_page_footer_offers_page_numbers(db, monkeypatch, capsys):
     data.m = -1
     CollectionBook().openBook(data)
     assert capsys.readouterr().out.count("[番号]ページを見る") == 2
+
+
+def test_piped_input_is_echoed_after_the_prompt(monkeypatch, capsys):
+    keys_from(monkeypatch, "w")
+    monkeypatch.setattr("sys.stdin", SimpleNamespace(isatty=lambda: False))
+    Screen.ask("[w]進む")
+    assert "> w\n" in capsys.readouterr().out
+
+
+def test_trophies_hide_unearned_names_and_list_keys(monkeypatch, capsys):
+    from Trophy import Trophy
+    keys_from(monkeypatch, "x")
+    Trophy().browseTrophies(player(trophiesList=["クリアー"]))
+    out = capsys.readouterr().out
+    assert "> クリアー" in out
+    assert "????" in out
+    assert "ボス殲滅完了" not in out
+    assert "[w/s]勲章と説明を見る [x]戻る" in out
+
+
+def test_merchant_lists_prices_with_cursor(monkeypatch, capsys):
+    from WithMerchant import WithMerchant
+    keys_from(monkeypatch, "s", "x", "x")
+    WithMerchant().browseBullets(player())
+    out = capsys.readouterr().out
+    assert re.search(r"> 青弾 +100金", out)
+    assert "[w/s]選ぶ [z]選んだ弾を買う [x]戻る" in out
+
+
+def test_typewriter_is_off_without_a_terminal(monkeypatch, capsys):
+    monkeypatch.setenv("ISSEKI_TYPEWRITER", "1")
+    monkeypatch.setattr("time.sleep", lambda _: pytest.fail("animated"))
+    Screen.say("商人がこちらを見ている。「なにか買う?」")
+    assert capsys.readouterr().out == "商人がこちらを見ている。「なにか買う?」\n"
