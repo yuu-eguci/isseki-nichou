@@ -19,10 +19,6 @@ def systemDis(statement):
     import Screen
     Screen.say(statement)
 
-def invDis(statement):
-    import Screen
-    Screen.rows(["    " + statement])
-
 # ==============================
 # 文章出力関数(開発用) <ADMIN>がつく
 # ==============================

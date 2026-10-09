@@ -134,7 +134,7 @@ def scene(*lines):
     if isPlain():
         if lines != lastScene:
             for line in lines:
-                print(line)
+                typewrite(line)
         lastScene = lines
     else:
         body.extend(lines)
